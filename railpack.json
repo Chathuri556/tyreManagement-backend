@@ -1,5 +1,0 @@
-{
-  "buildCommand": "cd tyreManagement-backend && npm install",
-  "startCommand": "npm start",
-  "outputDirectory": "."
-}
