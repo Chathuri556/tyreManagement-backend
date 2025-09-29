@@ -106,7 +106,6 @@ async function createAllTables() {
           'supervisor approved',
           'technical-manager approved',
           'engineer approved',
-          'Engineer Approved',
           'customer-officer approved',
           'approved',
           'rejected',

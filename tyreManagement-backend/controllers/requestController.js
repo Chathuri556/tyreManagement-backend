@@ -478,7 +478,7 @@ exports.checkVehicleRestrictions = async (req, res) => {
       where: {
         vehicleNumber: vehicleNumber,
         status: {
-          [require('sequelize').Op.notIn]: ['rejected', 'complete', 'Engineer Approved', 'order placed']
+          [require('sequelize').Op.notIn]: ['rejected', 'complete', 'engineer approved', 'order placed']
         }
       },
       order: [['submittedAt', 'DESC']]
@@ -502,7 +502,7 @@ exports.checkVehicleRestrictions = async (req, res) => {
       where: {
         vehicleNumber: vehicleNumber,
         status: {
-          [require('sequelize').Op.in]: ['complete', 'Engineer Approved', 'order placed']
+          [require('sequelize').Op.in]: ['complete', 'engineer approved', 'order placed']
         },
         submittedAt: {
           [require('sequelize').Op.gte]: thirtyDaysAgo
@@ -586,9 +586,9 @@ exports.placeOrder = async (req, res) => {
     });
 
     // Check if request is Engineer Approved (ready for order)
-    if (request.status !== "Engineer Approved" && request.status !== "complete") {
+    if (request.status !== "engineer approved" && request.status !== "complete") {
       return res.status(400).json({
-        error: "Request must be Engineer Approved before placing order",
+        error: "Request must be engineer approved before placing order",
         currentStatus: request.status,
       });
     }

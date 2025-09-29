@@ -30,7 +30,6 @@ const Request = sequelize.define(
         "supervisor approved",
         "technical-manager approved",
         "engineer approved",
-        "Engineer Approved",
         "customer-officer approved",
         "approved",
         "rejected",
