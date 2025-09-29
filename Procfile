@@ -1,1 +1,0 @@
-web: cd tyreManagement-backend && npm start
