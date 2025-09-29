@@ -57,8 +57,8 @@ const server = http.createServer(app);
 // websocketService.initialize(server);
 
 // Start server
-server.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+server.listen(port, '0.0.0.0', () => {
+  console.log(`Server running on http://0.0.0.0:${port}`);
   console.log(`WebSocket server initialized`);
 
   // Initialize database after server starts

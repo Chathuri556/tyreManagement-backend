@@ -57,6 +57,17 @@ app.use("/api/tire-details", require("./routes/tireDetailsRoutes"));
 const userRoutes = require("./routes/userRoutes");
 app.use("/api/users", userRoutes);
 
+// Root endpoint for Railway health check
+app.get("/", (req, res) => {
+  res.json({
+    status: "OK",
+    message: "Tyre Management Backend API is running",
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "development",
+    version: "1.0.0"
+  });
+});
+
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.json({
