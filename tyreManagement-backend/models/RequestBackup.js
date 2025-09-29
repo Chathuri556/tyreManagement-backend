@@ -22,7 +22,6 @@ const RequestBackup = sequelize.define(
     vehicleBrand: { type: DataTypes.STRING(50), allowNull: false },
     vehicleModel: { type: DataTypes.STRING(50), allowNull: false },
     lastReplacementDate: { type: DataTypes.DATEONLY, allowNull: false },
-    existingTireMake: { type: DataTypes.STRING(100), allowNull: false },
     tireSizeRequired: { type: DataTypes.STRING(50), allowNull: false },
     presentKmReading: { type: DataTypes.INTEGER, allowNull: false },
     previousKmReading: { type: DataTypes.INTEGER, allowNull: false },
@@ -30,7 +29,7 @@ const RequestBackup = sequelize.define(
     comments: { type: DataTypes.TEXT },
     status: {
       type: DataTypes.ENUM(
-  
+        "pending",
         "supervisor approved",
         "technical-manager approved",
         "engineer approved",
@@ -52,7 +51,6 @@ const RequestBackup = sequelize.define(
     supervisor_notes: { type: DataTypes.TEXT },
     technical_manager_note: { type: DataTypes.TEXT },
     engineer_note: { type: DataTypes.TEXT },
-    customer_officer_note: { type: DataTypes.TEXT },
     supervisorId: {
       type: DataTypes.INTEGER,
       allowNull: false,
