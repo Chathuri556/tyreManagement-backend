@@ -12,13 +12,10 @@ if (missingEnvVars.length > 0) {
 }
 
 const app = require("./app");
-const { sequelize, pool } = require("./config/db"); // Correct import
-const { autoMigrate } = require("./scripts/auto-migrate-on-start"); // Auto migration for Railway
-require("./models"); // Loads all models and associations
-// const requestRoutes = require("./routes/requestRoutes"); // Removed - routes handled in app.js
-// const vehicleRoutes = require("./routes/vehicleRoutes"); // Removed - routes handled in app.js
-// const sseRoutes = require("./routes/sseRoutes"); // Disabled
-// const websocketService = require("./services/websocketService"); // Disabled
+const { sequelize, pool } = require("./config/db");
+const { createAllTables } = require("./scripts/auto-migrate-all-tables");
+require("./models");
+
 const http = require("http");
 
 const port = process.env.PORT || 5000;
@@ -45,21 +42,12 @@ async function testDbConnection() {
   }
 }
 
-// Routes are already defined in app.js, no need to mount them again here
-// app.use("/api", requestRoutes); // Removed - already mounted in app.js
-// app.use("/api", vehicleRoutes); // Removed - already mounted in app.js
-// app.use("/api/sse", sseRoutes); // Disabled
-
 // Create HTTP server
 const server = http.createServer(app);
-
-// WebSocket disabled for Railway compatibility
-// websocketService.initialize(server);
 
 // Start server
 server.listen(port, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${port}`);
-  console.log(`WebSocket server initialized`);
 
   // Initialize database after server starts
   initializeDatabase();
@@ -73,11 +61,11 @@ async function initializeDatabase() {
     // Test database connection
     await testDbConnection();
 
-    // Run auto-migration for Railway deployment
-    console.log("Running auto-migration for soft delete functionality...");
-    const migrationResult = await autoMigrate();
+    // Run comprehensive auto-migration for all tables
+    console.log("Running comprehensive auto-migration for all tables...");
+    const migrationResult = await createAllTables();
     if (migrationResult.success) {
-      console.log("✅ Migration check completed:", migrationResult.message);
+      console.log("✅ Migration completed:", migrationResult.message);
     } else {
       console.log("⚠️  Migration warning:", migrationResult.message);
     }
