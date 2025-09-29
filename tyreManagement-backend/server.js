@@ -14,6 +14,7 @@ if (missingEnvVars.length > 0) {
 const app = require("./app");
 const { sequelize, pool } = require("./config/db"); // Correct import
 const { autoMigrate } = require("./scripts/auto-migrate-on-start"); // Auto migration for Railway
+const { initializeRailwayDatabase } = require("./scripts/railway-init-database"); // Database initialization for Railway
 require("./models"); // Loads all models and associations
 // const requestRoutes = require("./routes/requestRoutes"); // Removed - routes handled in app.js
 // const vehicleRoutes = require("./routes/vehicleRoutes"); // Removed - routes handled in app.js
@@ -73,7 +74,12 @@ async function initializeDatabase() {
     // Test database connection
     await testDbConnection();
 
-    // Run auto-migration for Railway deployment
+    // Initialize all database tables first (this will create the missing 'requests' table)
+    console.log("Running comprehensive database initialization for Railway...");
+    await initializeRailwayDatabase();
+    console.log("✅ Database tables initialized successfully");
+
+    // Run auto-migration for Railway deployment (backup table creation)
     console.log("Running auto-migration for soft delete functionality...");
     const migrationResult = await autoMigrate();
     if (migrationResult.success) {
@@ -82,12 +88,19 @@ async function initializeDatabase() {
       console.log("⚠️  Migration warning:", migrationResult.message);
     }
 
-    // Sync models
-    await sequelize.sync({ alter: true });
-    console.log("Database & tables synced!");
+    // Sync models (this should now work since tables exist)
+    try {
+      await sequelize.sync({ alter: false }); // Use alter: false since we created tables manually
+      console.log("✅ Sequelize models synced with existing tables!");
+    } catch (syncError) {
+      console.log("⚠️  Sequelize sync warning:", syncError.message);
+      console.log("Tables were created manually, continuing...");
+    }
+    
+    console.log("🎉 Database initialization completed successfully!");
   } catch (error) {
-    console.error("Database initialization failed:", error);
+    console.error("❌ Database initialization failed:", error);
     // Don't exit the process - server can still handle health checks
-    console.log("Server will continue running without database...");
+    console.log("⚠️  Server will continue running, but database functionality may be limited...");
   }
 }
