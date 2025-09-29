@@ -22,6 +22,7 @@ const RequestBackup = sequelize.define(
     vehicleBrand: { type: DataTypes.STRING(50), allowNull: false },
     vehicleModel: { type: DataTypes.STRING(50), allowNull: false },
     lastReplacementDate: { type: DataTypes.DATEONLY, allowNull: false },
+    existingTireMake: { type: DataTypes.STRING(100), allowNull: false },
     tireSizeRequired: { type: DataTypes.STRING(50), allowNull: false },
     presentKmReading: { type: DataTypes.INTEGER, allowNull: false },
     previousKmReading: { type: DataTypes.INTEGER, allowNull: false },
