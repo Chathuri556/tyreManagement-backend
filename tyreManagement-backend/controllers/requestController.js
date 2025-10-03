@@ -24,6 +24,14 @@ exports.createRequest = async (req, res) => {
     requestData.previousKmReading = Number(requestData.previousKmReading);
     requestData.userId = Number(requestData.userId);
 
+    // Validate tire and tube quantity limits
+    if (requestData.quantity > 4) {
+      return res.status(400).json({ error: "Tire quantity cannot exceed 4" });
+    }
+    if (requestData.tubesQuantity > 4) {
+      return res.status(400).json({ error: "Tube quantity cannot exceed 4" });
+    }
+
     // Validate required fields
     const requiredFields = [
       "userId",
