@@ -24,6 +24,20 @@ exports.createRequest = async (req, res) => {
     requestData.previousKmReading = Number(requestData.previousKmReading);
     requestData.userId = Number(requestData.userId);
 
+    // Validate quantities
+    const MAX_QUANTITY = 4;
+    if (requestData.quantity > MAX_QUANTITY) {
+      return res.status(400).json({ 
+        error: `Maximum ${MAX_QUANTITY} tires can be requested at once` 
+      });
+    }
+    
+    if (requestData.tubesQuantity > MAX_QUANTITY) {
+      return res.status(400).json({ 
+        error: `Maximum ${MAX_QUANTITY} tubes can be requested at once` 
+      });
+    }
+
     // Validate required fields
     const requiredFields = [
       "userId",
